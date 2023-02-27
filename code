@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<?php
+$conn=mysqli_connect("localhost","root","");
+if(!$conn){
+    echo "Connection not established";
+}
+else{
+    echo "Connection Established";
+}
+$db=mysqli_select_db($conn,"studentportal");
+if(!$db){
+    echo "<br> Connection not established";
+}
+else{
+    echo "Connection Established";
+}
+?>
+<table border="5px solid black">
+    <tr>
+        <td>ID</td>
+        <td>NAME</td>
+        <td>ADDRESS</td>
+        <td>AGE</td>
+    </tr>
+
+<?php
+$result=mysqli_query($conn,"select * from student");
+while($rows=mysqli_fetch_assoc($result)){
+?>
+<tr>
+    <td><?php echo $rows['sid']?></td>
+    <td><?php echo $rows['name']?></td>
+    <td><?php echo $rows['address']?></td>
+    <td><?php echo $rows['age']?></td>
+</tr>
+</table>
+<?php
+}
+?>
+
+
+while($rows=mysqli_fetch_assoc($result)){
+            if($rows['customerId']==$_POST['id']){
+                $id=$_POST['id'];
+                $res=mysqli_query($conn,"select * from applicant where customerId='$id';");
+                while($r=mysqli_fetch_assoc($res)){?>
+                    <tr><td><?php echo $r['customerId']?></td></tr>
+                    <tr><td><?php echo $r['customerName']?></td></tr>
+                    <?php
+                }
+            }
+            else{
+                
+            }
+          }
+        }

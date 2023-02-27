@@ -1,0 +1,173 @@
+SUBMITTED.PHP
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    table{
+          background-color:	lightgrey;  
+          margin-left:170px;
+          margin-top:60px;
+          border-radius:10px;
+          font-weight:bold;
+          text-align:center;
+          align-items:center;
+          justify-content:center;
+
+    } 
+    span{
+      
+        margin-left:180px;
+        margin-top:20px;
+   
+     
+    }
+    </style>
+<body>
+<br>
+<h2 style="color:black; font-size:24px; text-align:center">SUBMITTED  QUERIES:</h2>
+<br>   
+
+<?php
+   include("webadmin.php");
+   ?>
+   <table border="2px" cellspacing="8px" cellpadding="10px">
+   <tr><th colspan=7><h2>Queries Details!</h2></h2></th></tr>
+    <tr colspan=3>
+    <th>Query id</th>
+    <th>Applicant Id</th>
+    <th>Query</th>
+    <th>Response status</th>
+    <th>Response Time</th>
+    <th>Posted Time</th>
+    <th>Update Response</th>
+
+</tr>
+<?php
+$result=mysqli_query($conn,"select * from queries");
+{
+        while($rows=mysqli_fetch_assoc($result))
+        {    
+            echo "
+ <tr> 
+ <td>". $rows['queryId'] ."</td> 
+ <td>". $rows['applicantId'] ."</td>
+ <td>".$rows['postDescription'] ."</td>
+<td>". $rows['response'] ."</td> 
+ <td>". $rows['responseTime'] ."</td>
+ <td>". $rows['postingTime'] ."</td>
+ <td><a href='edit.php? qr=$rows[queryId] & rp=$rows[response] & 
+ rt=$rows[responseTime]'>Edit</td> </tr>
+ "; 
+} 
+} 
+?>
+
+
+
+
+</table>
+<br>
+<br>
+<br>
+<h2 style="color:black; font-size:24px; text-align:center">QUERY RESPONSE STATUS</h2>
+<br>
+
+<?php
+    $result=mysqli_query($conn,"select * from queries");
+    while($rows=mysqli_fetch_assoc($result))
+    {
+?>
+<?php
+if(is_null($rows['response']) ) 
+{
+
+  echo '<span style="color:red; font-size:22px; font-weight:bold; margin-left:200px; ">'.$rows['postDescription'].'</span>'.'<br>'.'<br>';
+}
+else{
+
+echo '<span style="color:green; font-size:22px; font-weight:bold; margin-left:200px; ">'.'<b>'.'<i>'.$rows['postDescription'].'</i>'.'</b>'.'</span>'.'<br>'.'<br>';
+
+}
+
+
+?>
+
+
+<?php
+}
+?> 
+
+
+
+
+</body>
+</html>
+
+
+EDIT.PHP:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <?php
+    error_reporting("0");
+         include("submitted.php"); 
+         $qr=$_GET['qr'] ;
+         $rp=$_GET['rp']; 
+         $rt=$_GET['rt']; 
+         ?>
+         <form action="" method='GET'>
+              <table style="margin-left:240px; width:280px; height:130px; border:4px solid black; margin-top:-290px;">
+              <tr>
+              <th colspan=2 style="font-size:20px;"><h3>Update Query Response</h3></th></tr><br>
+              <tr>
+              <th style="font-size:20px;">Query Id</th>
+              <td><input type="text" style="width:300px; margin-top:20px; margin-left:-50px; " name="qid" value="<?php echo "$qr" ?>"
+               required></td> </tr>
+               <tr>
+               <th style="font-size:18px;">Response</th>
+               <td><input type="text" style="width:300px; margin-top:20px; margin-left:-50px; " name="resp" value="<?php echo "$rp" ?>" ></td></tr>
+               <tr>
+               <th style="font-size:18px;">Response Time</th>
+                <td><input type="text" style="width:300px; margin-top:20px; margin-left:-50px; " name="resptm" value="<?php echo "$rt" ?>" ></td></tr>   <tr>
+            
+                <tr>
+                   
+                    <td ><input type="submit" name="update" value="Update Response" style="margin-left:274px; margin-top:40px; border-radius:15px; font-style:italic; background-color:lightpink; width:140px; height:60px; "></td> </tr>
+                
+                <?php
+                        if(($_GET['update'])) 
+                        { 
+                          $qid=$_GET['qid'] ; 
+                          $resp=$_GET['resp'] ; 
+                          $resptm=$_GET['resptm'] ; 
+                          $queryy="update queries set response=' $resp', responseTime='$resptm' WHERE queryId='$qid'; "; 
+                          $result=mysqli_query($conn,$queryy); 
+                          if($result) 
+                          { 
+                            "<script>alert('query is updated')</script>";
+                             
+                          } 
+                          else{ 
+                            "<script>alert('Failed to update query')</script>";
+                             
+                          } 
+                        }
+                ?>
+                <div>
+                    <img src="imag/resp2.jpg" width="350px" height="300px" style="margin-left:1110px; border-radius:30px; margin-top: -300px; box-shadow:12px 10px 9px grey; ">
+                    </div>
+
+</body>
+</html>
